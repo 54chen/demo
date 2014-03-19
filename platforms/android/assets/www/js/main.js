@@ -18,11 +18,14 @@ function renderEntries(entries) {
 
 function initialize() {
 	console.log('ready to use google');
-	var feed = new google.feeds.Feed(RSS);
+        var d = new Date().getTime();
+        var url = RSS + "?" + d;
+	var feed = new google.feeds.Feed(url);
 	feed.setNumEntries(10);
 	$.mobile.showPageLoadingMsg();
 	feed.load(function(result) {
 		$.mobile.hidePageLoadingMsg();
+                console.log("feed:" + url);
 		if(!result.error) {
 			entries = result.feed.entries;
 			localStorage["entries"] = JSON.stringify(entries);
@@ -61,7 +64,6 @@ $("#contentPage").live("pageshow", function(prepage) {
 	$("h1", this).text(entries[selectedEntry].title);
 	var contentHTML = "";
 	contentHTML += entries[selectedEntry].content;
-	contentHTML += '<p/><a href="'+entries[selectedEntry].link + '" class="fullLink" data-role="button">Read Entry on Site</a>';
 	$("#entryText",this).html(contentHTML);
 	$("#entryText .fullLink",this).button();
 
